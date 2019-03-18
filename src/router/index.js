@@ -9,6 +9,9 @@ import CustomerOrder from '@/components/pages/CustomerOrders';
 import CustomerCheckout from '@/components/pages/CustomerCheckout';
 import order from '@/components/pages/order';
 import Coupon from '@/components/pages/Coupon';
+import homeboard from '@/components/homeboard';
+import home from '@/components/home';
+
 
 
 
@@ -21,8 +24,7 @@ export default new Router({
     {
     path:'*',
     redirect:'login',
-    },
-    
+    },    
     {
       path:'/login',
       name:'Login',
@@ -57,9 +59,19 @@ export default new Router({
 
         {
         path: '/',
-        name: 'Dashboard',
-        component: Dashboard,
+        name: 'homeboard',
+        component: homeboard,
         children:[
+          {
+            path:'home',
+            name:'home',
+            component: home,
+          },
+          {
+            path:'order',
+            name:'order',
+            component: order,
+          },
           {
             path:'Customer_order',
             name:'CustomerOrder',

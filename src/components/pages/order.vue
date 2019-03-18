@@ -30,7 +30,8 @@
 				</tbody>
 			</table>
 		</div>
-		<nav aria-label="Page navigation example">
+		<nav aria-label="Page navigation example" style=" display:flex;
+    align-items:center;  justify-content:center;">
 								<ul class="pagination">
 										<li class="page-item" :class="{'disable': !pagination.has_pre}">
 										<a class="page-link" href="#" aria-label="Previous" @click.prevent="getOrders(pagination.current_page -1)">
