@@ -11,6 +11,9 @@ import order from '@/components/pages/order';
 import Coupon from '@/components/pages/Coupon';
 import homeboard from '@/components/homeboard';
 import home from '@/components/home';
+import checkOrder from '@/components/checkOrder';
+import shopping from '@/components/shopping';
+
 
 
 
@@ -24,7 +27,49 @@ export default new Router({
     {
     path:'*',
     redirect:'login',
-    },    
+    },
+
+    {
+      path: '/',
+      name: 'homeboard',
+      component: homeboard,
+      children:[
+        {
+          path:'/',
+          name:'home',
+          component: home,
+        },
+        {
+          path:'order',
+          name:'order',
+          component: order,
+        },
+        {
+          path:'/checkorder',
+          name:'checkorder',
+          component: checkOrder,
+        },
+        {
+          path:'shopping/:productId',
+          name:'shopping',
+          component: shopping,
+        },
+        {
+          path:'Customer_order',
+          name:'CustomerOrder',
+          component: CustomerOrder,
+         
+        },
+        {
+          path:'customer_checkout/:orderId',
+          name:'CustomerCheckout',
+          component: CustomerCheckout,
+         
+        },
+        
+      ],
+    },      
+
     {
       path:'/login',
       name:'Login',
@@ -56,36 +101,5 @@ export default new Router({
         },
       ],
     },
-
-        {
-        path: '/',
-        name: 'homeboard',
-        component: homeboard,
-        children:[
-          {
-            path:'home',
-            name:'home',
-            component: home,
-          },
-          {
-            path:'order',
-            name:'order',
-            component: order,
-          },
-          {
-            path:'Customer_order',
-            name:'CustomerOrder',
-            component: CustomerOrder,
-           
-          },
-          {
-            path:'customer_checkout/:orderId',
-            name:'CustomerCheckout',
-            component: CustomerCheckout,
-           
-          },
-        ],
-      },   
-
   ],
 });
