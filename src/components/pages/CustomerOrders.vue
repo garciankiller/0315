@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div class="container">
     <loading :active.sync="isLoading"></loading>
-    <div class="row mt-4">
-      <div class="col-md-4 mb-4" v-for="item in products" :key="item.id">
-        <div class="card border-0 shadow-sm">
+    <div class="row mt-4 ">
+      <div class="col-md-4 mb-4 " v-for="item in products" :key="item.id">
+        <div class="card border-0 shadow-sm bg-light">
           <div style="height: 150px; background-size: cover; background-position: center"
             :style="{backgroundImage: `url(${item.imageUrl})`}">
           </div>
           <div class="card-body">
-            <span class="badge badge-secondary float-right ml-2">{{ item.category }}</span>
+            <span class="badge badge-success
+             float-right ml-2">{{ item.category }}</span>
             <h5 class="card-title">
               <a href="#" class="text-dark">{{ item.title }}</a>
             </h5>
@@ -19,9 +20,9 @@
               <div class="h5" v-if="item.price">現在只要 {{ item.price }} 元</div>
             </div>
           </div>
-          <div class="card-footer d-flex">
+          <div class="card-footer d-flex ">
             <button type="button" class="btn btn-outline-secondary btn-sm"
-            @click.prevent="getProduct(item.id)">
+            @click.prevent="goshop(item.id)">
               <i class="fas fa-spinner fa-spin" v-if="status.loadingItem === item.id"></i>
               查看更多
             </button>
@@ -76,11 +77,11 @@
             </div>
         </div>
     </div>
-    
-    
+
+
     <div class="my-5 row justify-content-center">
       <div class="my-5 row justify-content-center">
-        <table class="table">
+        <!-- <table class="table">
           <thead>
             <th></th>
             <th>品名</th>
@@ -115,22 +116,35 @@
               <td class="text-right text-success">{{ cart.final_total }}</td>
             </tr>
           </tfoot>
-        </table>
-        
-        <div class="input-group mb-3 input-group-sm">
-          <input type="text" class="form-control" v-model="coupon_code" placeholder="請輸入優惠碼">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="addCouponCode">
-              套用優惠碼
-            </button>
-          </div>
-        </div>
+        </table> -->
+
+        <nav aria-label="Page navigation example " >
+								<ul class="pagination .justify-content-end ">
+										<li class="page-item " :class="{'disable': !pagination.has_pre}">
+										<a class="page-link " href="#" aria-label="Previous" @click.prevent="getProducts(pagination.current_page -1)">
+												<span aria-hidden="true">&laquo;</span>
+										</a>
+										</li>
+										<li class="page-item " v-for="page in pagination.total_pages" :key="page"
+												:class="{'active': pagination.current_page === page}">
+												<a class="page-link " href="#" @click.prevent="getProducts(page)">{{page}}</a></li>
+										<li class="page-item " :class="{'disable': !pagination.has_next}">
+										<a class="page-link " href="#" aria-label="Next"
+										@click.prevent="getProducts(pagination.current_page +1)">
+												<span aria-hidden="true">&raquo;</span>
+										</a>
+										</li>
+								</ul>
+				</nav>
+
+
+
       </div>
 
-  
+
 
     </div>
-    <div class="my-5 row justify-content-center">
+    <!-- <div class="my-5 row justify-content-center">
       <form class="col-md-6" @submit.prevent="createOrder">
         <div class="form-group">
           <label for="useremail">Email</label>
@@ -175,7 +189,7 @@
           <button class="btn btn-danger">送出訂單</button>
         </div>
       </form>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -188,6 +202,7 @@ export default {
       products: [],
       product:[],
       cart:[],
+      pagination: {},
       status:{
           loadingItem:'',
       },
@@ -205,24 +220,50 @@ export default {
     };
   },
   methods: {
-    getProducts() {
-      const vm = this;
-      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products`;
-      vm.isLoading = true;
-      this.$http.get(url).then((response) => {
-        vm.products = response.data.products;
-        console.log(response);
-        vm.isLoading = false;
-      });
-    },
+    // getProducts() {
+    //   const vm = this;
+    //   const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products`;
+    //   vm.isLoading = true;
+    //   this.$http.get(url).then((response) => {
+    //     vm.products = response.data.products;
+    //     console.log(response);
+    //     vm.isLoading = false;
+    //   });
+    // },
+    getProducts(page = 1){
+            const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products?page=${page}`;
+            const vm = this;
+            vm.isLoading = true;
+            console.log(process.env.APIPATH, process.env.CUSTOMPATH);
+                this.$http.get(api).then((response) => {
+                console.log(response.data);
+                vm.isLoading = false;
+                vm.pagination = response.data.pagination;
+               vm.products =  response.data.products;
+            });
+        },
     getProduct(id){
       const vm = this;
       const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/product/${id}`;
       vm.status.loadingItem = id;
       this.$http.get(url).then((response) => {
         vm.product = response.data.product;
-        $('#productModal').modal('show');
+        //$('#productModal').modal('show');
+        
         console.log(response);
+        vm.getCart();
+        vm.status.loadingItem = '';
+      });
+    },
+    goshop(id){
+      const vm = this;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/product/${id}`;
+      vm.status.loadingItem = id;
+      this.$http.get(url).then((response) => {
+        vm.product = response.data.product;
+        vm.$router.push(`/shopping/${response.data.product.id}`);
+        
+        console.log(response.data.product);
         vm.status.loadingItem = '';
       });
     },
@@ -250,7 +291,7 @@ export default {
         vm.cart = response.data.data;
         console.log(response);
         vm.isLoading = false;
-        
+
       });
     },
     removeCartItem(id){
@@ -291,7 +332,7 @@ export default {
         }else{
           console.log('欄位不完整');
         }
-      }); 
+      });
     },
   },
   created() {

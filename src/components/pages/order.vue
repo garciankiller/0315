@@ -1,38 +1,38 @@
 <template>
     <div>
       <div class="table-responsive">
-		  <loading :active.sync="isLoading"></loading>
-			<table class="table table-hover mt-3">
-				<thead class="table-becare">
-					<tr class="text-nowrap">
-						<th width="40" class="text-center">購買時間</th>
-                        <th width="80" class="text-center">Email</th>
-                        <th width="80" class="text-center">購買款項</th>
-                        <th width="40">應付金額</th>
-                        <th width="80" class="text-center">是否付款</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr v-for="item in orders" :key="item.id">
-						<td>{{item.create_at | date}}</td>
-						<td>{{item.user.email}}</td>
-						<td class="text-center">
-							<ul v-for="item2 in item.products" :key="item2.id" style="list-style:none">
-                                <li>{{item2.product.title}} 數量：{{item2.qty}}{{item2.product.unit}}</li>
-                            </ul>
-						</td>
-						<td>{{item.total}}</td>
-						<td class="text-center">
-                            <span class="text-success" v-if="item.is_paid">已付款</span>
-                            <span class="text-danger" v-else>未付款</span>
-                        </td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<nav aria-label="Page navigation example" style=" display:flex;
-    align-items:center;  justify-content:center;">
-								<ul class="pagination">
+					<loading :active.sync="isLoading"></loading>
+					<table class="table table-hover mt-3 container">
+						<thead class="table-becare">
+							<tr class="text-nowrap">
+								<th width="40" class="text-center">購買時間</th>
+														<th width="60" class="text-center">Email</th>
+														<th width="80" class="text-center">購買款項</th>
+														<th width="40" class="text-center"
+														>應付金額</th>
+														<th width="80" class="text-center">是否付款</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in orders" :key="item.id">
+								<td class="text-center">{{item.create_at | date}}</td>
+								<td class="text-center">{{item.user.email}}</td>
+								<td class="text-center">
+								<ul v-for="item2 in item.products" :key="item2.id" style="list-style:none">
+									<li>{{item2.product.title}} 數量：{{item2.qty}}{{item2.product.unit}}</li>
+								</ul>
+								</td>
+								<td class="text-center">{{item.total}}</td>
+								<td class="text-center">
+									<span class="text-success" v-if="item.is_paid">已付款</span>
+									<span class="text-danger" v-else>未付款</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav aria-label="Page navigation example" >
+								<ul class="pagination justify-content-center">
 										<li class="page-item" :class="{'disable': !pagination.has_pre}">
 										<a class="page-link" href="#" aria-label="Previous" @click.prevent="getOrders(pagination.current_page -1)">
 												<span aria-hidden="true">&laquo;</span>
