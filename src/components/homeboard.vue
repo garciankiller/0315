@@ -2,18 +2,22 @@
   <div>
     <homeNavbar/>
     <router-view></router-view>
+    <cart></cart>
     <Footer></Footer>
+    
   </div>
 </template>
 
 <script>
 import homeNavbar from './homeNavbar';
 import Footer from './Footer';
+import cart from './cart';
 
 export default {
   components:{
     homeNavbar,
     Footer,
+    cart,
 
 
 
